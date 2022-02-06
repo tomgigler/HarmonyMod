@@ -1,0 +1,39 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'java'
+}
+// Include dependent libraries in archive.
+
+group 'com.forgottenartsstudios'
+version '0.4'
+
+repositories {
+    mavenCentral()
+}
+
+def jdaVersion = '5.0.0-alpha.5'
+
+dependencies {
+    implementation("ch.qos.logback:logback-classic:1.2.8")
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.2'
+    implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.35'
+    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.9.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation ("net.dv8tion:JDA:$jdaVersion") {
+        exclude module: 'opus-java'
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('shadow')
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.forgottenartsstudios.Harmony.Main.Harmony'
+        )
+    }
+}
