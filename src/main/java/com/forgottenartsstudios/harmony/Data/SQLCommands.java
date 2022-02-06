@@ -10,7 +10,7 @@ public class SQLCommands {
             " (ID BIGINT PRIMARY KEY, " +
             " NAME TEXT, " +
             " PREFIX TEXT, " +
-            " PLAYERROLE BIGINT, " +
+            " ALIAS TEXT[], " +
             " SANDBOX BIGINT, " +
             " MODROLE BIGINT) ";
 

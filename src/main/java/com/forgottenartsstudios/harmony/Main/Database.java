@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 public class Database {
     public static Connection connectProductionDB() throws IOException, SQLException {
         Connection c = null;

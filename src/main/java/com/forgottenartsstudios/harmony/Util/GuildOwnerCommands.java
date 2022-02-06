@@ -19,10 +19,7 @@ import java.util.Objects;
 public class GuildOwnerCommands extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        Guild guild = event.getGuild();
-        if (event.getAuthor().isBot()) {
-            return;
-        }
+        if (event.getAuthor().isBot()) { return; }
         String prefix = Harmony.getGuildPrefix(event);
         String[] args = event.getMessage().getContentRaw().split("\\s+");
         if (args[0].startsWith(prefix)) {
@@ -37,23 +34,10 @@ public class GuildOwnerCommands extends ListenerAdapter {
                         purge(event, args);
                         break;
                     case "managertest":
-                        EmbedBuilder embed = new EmbedBuilder();
-                        embed.setDescription("You are a server manager.");
-                        embed.setColor(Color.CYAN);
-                        MessageEmbed msg = embed.build();
-                        event.getMessage().replyEmbeds(msg).queue();
+                        managerTest(event);
                         break;
                     case "setmod":
-                        try {
-                            Database.updateModRole(guild.getId(), args[1]);
-                            embed = new EmbedBuilder();
-                            embed.setDescription("Mod role set.");
-                            embed.setColor(Color.CYAN);
-                            msg = embed.build();
-                            event.getMessage().replyEmbeds(msg).queue();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        setModRole(event, args);
                         break;
                     case "shutdown":
                         Harmony.shutdown();
@@ -80,7 +64,7 @@ public class GuildOwnerCommands extends ListenerAdapter {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            event.getMessage().reply("Prefix updated to " + args[1]).queue();
+            event.getMessage().replyEmbeds(basicMessageEmbed("Prefix updated to " + args[1])).queue();
         }else event.getMessage().reply("Invalid syntax").queue();
     }
     public static void purge(MessageReceivedEvent event, String[] args){
@@ -88,5 +72,26 @@ public class GuildOwnerCommands extends ListenerAdapter {
         event.getMessage().delete().queue();
         List<Message> messages = event.getChannel().getHistory().retrievePast(values).complete();
         event.getTextChannel().deleteMessages(messages).queue();
+    }
+    public static void setModRole(MessageReceivedEvent event, String[] args){
+        Guild guild = event.getGuild();
+        try {
+            Database.updateModRole(guild.getId(), args[1]);
+            String msg = "Mod role set.";
+            event.getMessage().replyEmbeds(basicMessageEmbed(msg)).queue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void managerTest(MessageReceivedEvent event){
+        String msg = "You are a manager.";
+        event.getMessage().replyEmbeds(basicMessageEmbed(msg)).queue();
+    }
+    public static MessageEmbed basicMessageEmbed(String str){
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setDescription(str);
+        embed.setColor(Color.CYAN);
+        return embed.build();
     }
 }
