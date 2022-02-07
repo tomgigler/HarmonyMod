@@ -1,6 +1,7 @@
 package com.forgottenartsstudios.harmony.Main;
 
 import com.forgottenartsstudios.harmony.Data.GuildData;
+import com.forgottenartsstudios.harmony.Data.Module;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -33,7 +34,6 @@ public class Variables {
             e.printStackTrace();
         }
     }
-
     public static String getPrefix() { return prefix; }
     public static void setPrefix(String prefix) { Variables.prefix = prefix; }
 
@@ -43,6 +43,19 @@ public class Variables {
     public static List<User> users;
     public static List<Member> members;
 
+    public static List<Module> modules = new ArrayList<>();
+
+    public static void loadModules(){
+        Module moderation = new Module();
+        moderation.setName("moderation");
+        moderation.setRequiredLevel(1);
+        Module utility = new Module();
+        utility.setName("utility");
+        moderation.setRequiredLevel(1);
+        Module fun = new Module();
+        fun.setName("fun");
+        moderation.setRequiredLevel(1);
+    }
     public static void loadGuildList(){
         guilds = jda.getGuilds();
     }
@@ -72,6 +85,17 @@ public class Variables {
         InputStream is = null;
         try {
             is = Harmony.class.getClassLoader().getResourceAsStream("config.properties");
+            prop.load(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return prop;
+    }
+    public static Properties parseModuleConfig() throws IOException {
+        Properties prop  = new Properties();
+        InputStream is = null;
+        try {
+            is = Harmony.class.getClassLoader().getResourceAsStream("moduleconfig.properties");
             prop.load(is);
         } catch (IOException e) {
             e.printStackTrace();

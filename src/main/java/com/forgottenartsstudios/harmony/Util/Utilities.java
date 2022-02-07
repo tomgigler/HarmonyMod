@@ -111,4 +111,14 @@ public class Utilities {
                         }else event.getMessage().reply("Invalid syntax").queue();
                         break;
      */
+
+    /*
+    .addActionRow(
+                            Button.success("em2oji", Emoji.fromUnicode("U+2694U+FE0F")),
+                            Button.primary("btn2", Emoji.fromMarkdown("<:minn:245267426227388416>")),
+                            Button.danger("dolla2r", Emoji.fromMarkdown("<:redribbon:940009419519959051>")), // Button with only a label
+                            Button.secondary("lig2htred", Emoji.fromMarkdown("<a:matrix:940009209196605530>")), // Button with only a label
+                            Button.success("attac2k", "Attack").withEmoji(Emoji.fromMarkdown("<:yayPraiseTheSun:742681387617878109>"))
+                    )
+     */
 }

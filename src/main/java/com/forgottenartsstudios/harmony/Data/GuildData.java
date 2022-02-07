@@ -5,6 +5,7 @@ public class GuildData {
     String name;
     String prefix;
     String modRole;
+    int guildLevel;
 
     public Long getID() {
         return ID;

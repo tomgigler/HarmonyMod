@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -61,30 +62,44 @@ public class Harmony extends ListenerAdapter {
         Database.dropTables();
         Database.createTables(); //Create tables if not exists using SQLCommands
         Database.enterDefaultBotParameters();
-        registerCommands();
+        registerListeners();
+        registerGlobalCommands();
+        registerGuildCommands();
         Variables.loadGuildList();
         Variables.loadGuildDataList();
         out.info("Ready");
         jda.getPresence().setActivity(Activity.playing("Harmonizing"));
-
     }
-    public static void registerCommands(){
+    public static void registerGlobalCommands(){
         //GLOBAL COMMANDS
         List<CommandData> cmds = new ArrayList<>();
         cmds.add(Commands.slash("ping", "Calculate the ping of the bot."));
         cmds.add(Commands.slash("prefix", "Returns bot prefix"));
-        cmds.add(Commands.slash("mod", "Brings up Mod Control Panel").setDefaultEnabled(false));
-
+        cmds.add(Commands.slash("mod", "Brings up Mod Control Panel")
+                .addOption(OptionType.MENTIONABLE, "modmention", "User, Role, or Member."));
         //Add commands global
         jda.updateCommands().addCommands(cmds).queue();
-
-        //Add Util Command Events
+    }
+    public static void registerGuildCommands(){
+        //Add commands global
+        Guild guild = jda.getGuildById(852740148247658526L);
+        assert guild != null;
+        guild.updateCommands()
+                .addCommands(Commands.slash("test", "Brings up Mod Control Panel"))
+                .addCommands(Commands.slash("mod", "Brings up Mod Control Panel")
+                    .addOption(OptionType.MENTIONABLE, "modmention", "User, Role, or Member."))
+                .queue();
+    }
+    public static void registerListeners(){
+        //Add Command Events Listeners
         out.debug("Registering Harmony MOD Command Event Listeners");
         jda.addEventListener(new BotOwnerCommands());
         jda.addEventListener(new GuildOwnerCommands());
-        jda.addEventListener(new GuildOwnerSlashCommands());
         jda.addEventListener(new GuildModCommands());
         jda.addEventListener(new GuildModSlashCommands());
+
+        //Add Event Listeners
+        jda.addEventListener(new ButtonProcessor());
     }
     public static String getGuildPrefix(MessageReceivedEvent event){
         String prefix = null;
