@@ -4,8 +4,37 @@ public class GuildData {
     Long ID;
     String name;
     String prefix;
+    String[] alias;
     String modRole;
     int guildLevel;
+    int modmodule;
+    int utilmodule;
+
+    public int getModmodule() {
+        return modmodule;
+    }
+    public void setModmodule(int modmodule) {
+        this.modmodule = modmodule;
+    }
+    public int getUtilmodule() {
+        return utilmodule;
+    }
+    public void setUtilmodule(int utilmodule) {
+        this.utilmodule = utilmodule;
+    }
+    public String[] getAlias() {
+        return alias;
+    }
+    public void setAlias(String[] alias) {
+        this.alias = alias;
+    }
+    public int getGuildLevel() {
+        return guildLevel;
+    }
+
+    public void setGuildLevel(int guildLevel) {
+        this.guildLevel = guildLevel;
+    }
 
     public Long getID() {
         return ID;

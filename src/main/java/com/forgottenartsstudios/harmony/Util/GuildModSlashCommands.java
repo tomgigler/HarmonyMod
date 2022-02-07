@@ -43,9 +43,6 @@ public class GuildModSlashCommands extends ListenerAdapter {
             case "mod":
                 modControlPanel(event);
                 break;
-            case "test":
-                modControlPanel(event);
-                break;
             default:
                 out.debug("Mod Slash Command not found.");
         }
@@ -53,10 +50,14 @@ public class GuildModSlashCommands extends ListenerAdapter {
     public static void modControlPanel(SlashCommandInteractionEvent event){
         if (Objects.requireNonNull(event.getMember()).hasPermission(Permission.MODERATE_MEMBERS))
         {
+            out.debug("Mod Control Panel Hook: " + event.getHook());
+
             //event.deferReply().queue();
             Moderation moderation = new Moderation();
             moderation.setName(event.getMember().getEffectiveName());
             moderation.setModPanelMember(Objects.requireNonNull(event.getOption("modmention")).getAsMember());
+            moderation.setHook(event.getHook());
+            Variables.moderations.add(moderation);
 
             EmbedBuilder embed = new EmbedBuilder();
             embed.setColor(Color.CYAN);
@@ -79,6 +80,7 @@ public class GuildModSlashCommands extends ListenerAdapter {
             embed.addField("joined server at", member.getTimeJoined().format(DateTimeFormatter.RFC_1123_DATE_TIME), true);
             embed.addField("join server age", joinAge, true);
             embed.addField("status", member.getOnlineStatus().toString(), false);
+            embed.addField("role", String.valueOf(member.getRoles()), false);
             embed.setFooter("id: " + event.getId());
             embed.setThumbnail(member.getEffectiveAvatarUrl());
             MessageEmbed msgEmbed = embed.build();
